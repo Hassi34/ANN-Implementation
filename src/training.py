@@ -1,7 +1,7 @@
 from utils.common import read_config 
 from utils.data_mgmt import get_data
-from utils.model import create_model
-import argparse
+from utils.model import create_model, save_model
+import argparse, os 
 
 def training(config_path):
     config = read_config(config_path)
@@ -17,6 +17,15 @@ def training(config_path):
     EPOCHS = config['params']["epochs"]
     VALIDATION_SET = (X_valid, y_valid) 
     history = model.fit(X_train, y_train, epochs=EPOCHS, validation_data = VALIDATION_SET)
+
+    artifacts_dir = config["artifacts"]["artifacts_dir"]
+    model_dir = config["artifacts"]["model_dir"]
+
+    model_dir_path = os.path.join(artifacts_dir,model_dir)
+    os.makedirs(model_dir_path, exist_ok = True)
+
+    model_name = config['artifacts']['model_name']
+    save_model(model, model_name, model_dir_path)
 
 if __name__ == "__main__":
     args = argparse.ArgumentParser()
