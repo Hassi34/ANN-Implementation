@@ -130,3 +130,6 @@ dmypy.json
 .pyre/
 .vscode/
 .idea/
+.models
+*.h5
+Data 
