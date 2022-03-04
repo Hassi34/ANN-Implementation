@@ -1,6 +1,7 @@
 from matplotlib.pyplot import hist
 from utils.common import read_config 
 from utils.data_mgmt import get_data
+from utils.callbacks import get_callbacks
 from utils.model import create_model, save_model, save_plot
 import argparse, os 
 
@@ -17,9 +18,17 @@ def training(config_path):
 
     EPOCHS = config['params']["epochs"]
     VALIDATION_SET = (X_valid, y_valid) 
-    history = model.fit(X_train, y_train, epochs=EPOCHS, validation_data = VALIDATION_SET)
-
+    ES_PATIENCE = config['params']['es_patience']
+    model_ckpt_dir = config['artifacts']['model_ckpt_dir']
     artifacts_dir = config["artifacts"]["artifacts_dir"]
+    model_dir = config["artifacts"]["model_dir"]
+    model_ckpt_path = os.path.join(artifacts_dir,model_dir, model_ckpt_dir)
+    os.makedirs(model_ckpt_path, exist_ok=True)
+    callbacked_model_name = config['artifacts']['callbacked_model_name']
+    early_stopping_cb, checkpointing_cb = get_callbacks(ES_PATIENCE, callbacked_model_name, model_ckpt_path)
+    history = model.fit(X_train, y_train, epochs=EPOCHS, validation_data = VALIDATION_SET, callbacks = [early_stopping_cb, checkpointing_cb])
+
+    
     model_dir = config["artifacts"]["model_dir"]
 
     model_dir_path = os.path.join(artifacts_dir,model_dir)
@@ -32,6 +41,8 @@ def training(config_path):
     os.makedirs(plots_dir_path, exist_ok=True)
     plot_name = config["artifacts"]["plot_name"]
     save_plot(history, plot_name, plots_dir_path)
+
+
 
 if __name__ == "__main__":
     args = argparse.ArgumentParser()
