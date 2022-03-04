@@ -1,6 +1,7 @@
+from matplotlib.pyplot import hist
 from utils.common import read_config 
 from utils.data_mgmt import get_data
-from utils.model import create_model, save_model
+from utils.model import create_model, save_model, save_plot
 import argparse, os 
 
 def training(config_path):
@@ -23,9 +24,14 @@ def training(config_path):
 
     model_dir_path = os.path.join(artifacts_dir,model_dir)
     os.makedirs(model_dir_path, exist_ok = True)
-
     model_name = config['artifacts']['model_name']
     save_model(model, model_name, model_dir_path)
+    
+    plots_dir = config["artifacts"]["plots_dir"]
+    plots_dir_path = os.path.join(artifacts_dir, plots_dir )
+    os.makedirs(plots_dir_path, exist_ok=True)
+    plot_name = config["artifacts"]["plot_name"]
+    save_plot(history, plot_name, plots_dir_path)
 
 if __name__ == "__main__":
     args = argparse.ArgumentParser()
