@@ -1,8 +1,11 @@
-from matplotlib.pyplot import hist
-from utils.common import read_config 
-from utils.data_mgmt import get_data
-from utils.callbacks import get_callbacks
-from utils.model import create_model, save_model, save_plot
+#from src.utils.common import read_config 
+from OneFlow.utils.common import read_config
+#from src.utils.data_mgmt import get_data
+from OneFlow.utils.data_mgmt import get_data
+#from src.utils.callbacks import get_callbacks
+from OneFlow.utils.callbacks import get_callbacks
+#from src.utils.model import create_model, save_model, save_plot
+from OneFlow.utils.model import create_model, save_model, save_plot
 import argparse, os 
 
 def training(config_path):
