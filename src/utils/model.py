@@ -31,7 +31,8 @@ def save_model(model, model_name, model_dir):
 def save_plot(history, plot_name, plot_dir):
     unique_filename = get_unique_filename(plot_name)
     path_to_plot = os.path.join(plot_dir, unique_filename)
-    pd.DataFrame(history.history).plot()
+    pd.DataFrame(history.history).plot(figsize= (8,5))
     plt.grid(True)
+    plt.gca().set_ylim(0,1)
     plt.savefig(path_to_plot)
 
